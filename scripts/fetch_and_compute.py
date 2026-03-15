@@ -11,48 +11,39 @@ import os
 def fetch_data(ticker):
     df = yf.download(ticker, period="2y", interval="1d")
 
-    # Se yfinance non scarica nulla → evita crash
     if df is None or df.empty:
-        print("ERRORE: Nessun dato scaricato da yfinance.")
+        print(f"ERRORE: Nessun dato scaricato per {ticker}.")
         return pd.DataFrame()
 
-    df = df.rename(columns={"Close": "Close"})
     df = df.dropna()
     return df
 
 
 # ============================================================
-# 2. COMPUTE INDICATORS (VERSIONE ROBUSTA)
+# 2. COMPUTE INDICATORS
 # ============================================================
 
 def compute_indicators(df):
-    # Se il DataFrame è vuoto → esci subito
-    if df is None or df.empty:
+    if df.empty:
         print("ERRORE: DataFrame vuoto in compute_indicators.")
-        return pd.DataFrame()
+        return df
 
-    # Calcolo MMA20
     df["MMA20"] = df["Close"].rolling(window=20).mean()
 
-    # Calcolo MOMENTUM 12M, 6M, 3M
     df["MOM_12M"] = df["Close"].pct_change(252)
     df["MOM_6M"] = df["Close"].pct_change(126)
     df["MOM_3M"] = df["Close"].pct_change(63)
 
-    # Composite momentum
     df["MOM_COMPOSITE"] = (
         df["MOM_12M"] * 0.5 +
         df["MOM_6M"] * 0.3 +
         df["MOM_3M"] * 0.2
     )
 
-    # 🔥 PULIZIA DATI: evita errori di allineamento
     df = df.dropna(subset=["Close", "MOM_COMPOSITE", "MMA20"]).copy()
 
-    # Serie Close già allineata
     close = df["Close"]
 
-    # Segnali BUY/SELL
     df["BUY_SIGNAL"] = ((df["MOM_COMPOSITE"] > 0) & (close > df["MMA20"])).astype(int)
     df["SELL_SIGNAL"] = ((df["MOM_COMPOSITE"] < 0) & (close < df["MMA20"])).astype(int)
 
@@ -87,7 +78,7 @@ def save_outputs(df, ticker):
 # ============================================================
 
 def main():
-    ticker = "SPY"   # Cambialo se vuoi
+    ticker = "AAPL"   # <-- TICKER CHE FUNZIONA SU GITHUB ACTIONS
     df = fetch_data(ticker)
     df = compute_indicators(df)
     save_outputs(df, ticker)
