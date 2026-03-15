@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Raptor One – Dashboard</title>
+    <style>
+        body { background: #111; color: white; font-family: Arial; }
+        img { width: 600px; margin: 20px; border: 1px solid #444; }
+    </style>
+</head>
+<body>
+    <h1>Raptor One – Dashboard</h1>
+    <p>Grafici aggiornati automaticamente ogni 2 ore.</p>
+
+    <script>
+        const tickers = [
+            "QQQ3.MI","3USL.MI","3EUL.MI","3ITL.MI","3DEL.MI",
+            "3EML.MI","3GOL.MI","3SIL.MI","3NGL.MI","3BRS.MI",
+            "3TSL.MI","3NVD.MI","3PLT.MI","3CON.MI","3AMD.MI",
+            "3GOO.MI","3AMZ.MI","3MSF.MI","3FB.MI","3LNV.MI"
+        ];
+
+        tickers.forEach(t => {
+            const img = document.createElement("img");
+            img.src = `../charts/${t}_chart.png`;
+            document.body.appendChild(img);
+        });
+    </script>
+</body>
+</html>
