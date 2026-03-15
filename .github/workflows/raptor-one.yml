@@ -1,8 +1,11 @@
 name: Raptor One Auto Update
 
+permissions:
+  contents: write
+
 on:
   schedule:
-    - cron: "0 */2 * * *"
+    - cron: "0 */2 * * *"   # Ogni 2 ore
   workflow_dispatch:
 
 jobs:
