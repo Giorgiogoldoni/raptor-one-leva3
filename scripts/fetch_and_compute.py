@@ -40,6 +40,7 @@ def compute_indicators(df: pd.DataFrame) -> pd.DataFrame:
     tr3 = (low - prev_close).abs()
     tr = pd.concat([tr1, tr2, tr3], axis=1).max(axis=1)
     df["ATR14"] = tr.rolling(14).mean()
+    df = df.dropna()
 
     df["SIGNAL"] = np.where(
         (df["MOM_COMPOSITE"] > 0) & (close > df["MA20"]),
