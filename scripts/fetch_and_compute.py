@@ -10,16 +10,27 @@ import os
 
 def fetch_data(ticker):
     df = yf.download(ticker, period="2y", interval="1d")
+
+    # Se yfinance non scarica nulla → evita crash
+    if df is None or df.empty:
+        print("ERRORE: Nessun dato scaricato da yfinance.")
+        return pd.DataFrame()
+
     df = df.rename(columns={"Close": "Close"})
     df = df.dropna()
     return df
 
 
 # ============================================================
-# 2. COMPUTE INDICATORS (VERSIONE CORRETTA)
+# 2. COMPUTE INDICATORS (VERSIONE ROBUSTA)
 # ============================================================
 
 def compute_indicators(df):
+    # Se il DataFrame è vuoto → esci subito
+    if df is None or df.empty:
+        print("ERRORE: DataFrame vuoto in compute_indicators.")
+        return pd.DataFrame()
+
     # Calcolo MMA20
     df["MMA20"] = df["Close"].rolling(window=20).mean()
 
@@ -35,9 +46,10 @@ def compute_indicators(df):
         df["MOM_3M"] * 0.2
     )
 
-    # 🔥 PULIZIA DATI: allineamento perfetto
+    # 🔥 PULIZIA DATI: evita errori di allineamento
     df = df.dropna(subset=["Close", "MOM_COMPOSITE", "MMA20"]).copy()
 
+    # Serie Close già allineata
     close = df["Close"]
 
     # Segnali BUY/SELL
@@ -52,6 +64,10 @@ def compute_indicators(df):
 # ============================================================
 
 def save_outputs(df, ticker):
+    if df.empty:
+        print("Nessun dato da salvare.")
+        return
+
     os.makedirs("data", exist_ok=True)
     os.makedirs("charts", exist_ok=True)
 
@@ -71,7 +87,7 @@ def save_outputs(df, ticker):
 # ============================================================
 
 def main():
-    ticker = "SPY"   # puoi cambiarlo
+    ticker = "SPY"   # Cambialo se vuoi
     df = fetch_data(ticker)
     df = compute_indicators(df)
     save_outputs(df, ticker)
