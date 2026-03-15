@@ -1,0 +1,20 @@
+{
+  "tickers": [
+    { "ticker": "LQQ",  "signal": "NO DATA", "value": null },
+    { "ticker": "CL2",  "signal": "NO DATA", "value": null },
+    { "ticker": "LBUL", "signal": "NO DATA", "value": null },
+    { "ticker": "QQQ3", "signal": "NO DATA", "value": null },
+    { "ticker": "3GOL", "signal": "NO DATA", "value": null },
+    { "ticker": "3SIL", "signal": "NO DATA", "value": null },
+    { "ticker": "3BAL", "signal": "NO DATA", "value": null },
+    { "ticker": "3AAP", "signal": "NO DATA", "value": null },
+    { "ticker": "3AMD", "signal": "NO DATA", "value": null },
+    { "ticker": "3NVD", "signal": "NO DATA", "value": null },
+    { "ticker": "3AMZ", "signal": "NO DATA", "value": null },
+    { "ticker": "3BAB", "signal": "NO DATA", "value": null },
+    { "ticker": "3LNV", "signal": "NO DATA", "value": null },
+    { "ticker": "3CON", "signal": "NO DATA", "value": null },
+    { "ticker": "3NGS", "signal": "NO DATA", "value": null },
+    { "ticker": "3EUL", "signal": "NO DATA", "value": null }
+  ]
+}
